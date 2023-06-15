@@ -1,5 +1,5 @@
 #ifndef __BITEXCHANGE__
-# define __BITEXHCANGE__
+# define __BITEXHCHANGE__
 # include <map>
 # include <string>
 # include <iostream>
