@@ -6,6 +6,7 @@ int main(int argc, char **argv)
         std::cout << "Error" << std::endl;
     } else {
         PMergeMe mergeLst((argv + 1));
+        mergeLst.sort();
     }
     return 0;
 }
