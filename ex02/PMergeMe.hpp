@@ -29,6 +29,7 @@ class PMergeMe
         int getNextJacobsthalNum(int iterCount, int currentNum);
         void insertPendNum(int tagNum);
         double getElementByIndex(int index);
+        void printResult();
         std::list<double>::iterator getIteratorByIndex(int index);
         int _size;
         std::list<std::array<double, 2>> _pairs;
@@ -36,6 +37,9 @@ class PMergeMe
         std::vector<double> _pend;
         std::vector<std::string> _input;
         double  _straddler;
+        clock_t _begin;
+        clock_t _end;
+        double _timeNeeded;
 };
 
 #endif

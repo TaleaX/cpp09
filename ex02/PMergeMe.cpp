@@ -38,7 +38,7 @@ void PMergeMe::splitIntoPairs() {
     int counter = 0;
     std::array<double, 2> arr;
     for (inpIter it = _input.begin(); it != _input.end(); ++it) {
-        std::cout << "-" << *it << "-" << std::endl;
+        //std::cout << "-" << *it << "-" << std::endl;
         if (!isNumber(*it)) {
             std::cout << "Error" << std::endl;
             exit(0);
@@ -91,15 +91,10 @@ void PMergeMe::insertionSortPairs() {
 void PMergeMe::insertPendNum(int tagNum)
 {
     int index = tagNum - 1;
-    int minIndex = index - 2;
-   // std::cout << "index: " << index << std::endl;
     if (index == 0) {
         _output.push_front(_pend[index]);
     } else {
-       /*  std::cout << "index: " << index << std::endl;
-        std::cout << "pend 0: " << _pend[0] << std::endl;
-        std::cout << "pend: " << _pend[index] << std::endl; */
-        for (int i = minIndex; i <= index; ++i) {
+        for (int i = 0; i <= index; ++i) {
             double outputValue = this->getElementByIndex(i);
             std::list<double>::iterator outputIter = this->getIteratorByIndex(i);
             if (_pend[index] <= outputValue) {
@@ -112,12 +107,15 @@ void PMergeMe::insertPendNum(int tagNum)
 
 
 void PMergeMe::finalSort() {
+    for (pairsIter it = _pairs.begin(); it != _pairs.end(); ++it) {
+        _output.push_back((*it)[1]);
+        _pend.push_back((*it)[0]);
+    }
     int jacobsthal = 0;
     int prevJacobstahl = 0;
     for (int i = 0; i < _pend.size() + 2; ++i) {
         prevJacobstahl = jacobsthal;
         jacobsthal = this->getNextJacobsthalNum(i, jacobsthal);
-        std::cout << "i: " << i << "jacob: " << jacobsthal << std::endl;
         if (prevJacobstahl == 0)
             continue;
         if (jacobsthal == 1 && prevJacobstahl == 1)
@@ -125,7 +123,6 @@ void PMergeMe::finalSort() {
         if (jacobsthal > _pend.size())
             jacobsthal = _pend.size();
         for (int j = jacobsthal; j > prevJacobstahl; --j) {
-            std::cout << "j: " << j << std::endl;
             this->insertPendNum(j);
         }
         if (jacobsthal == _pend.size())
@@ -133,17 +130,33 @@ void PMergeMe::finalSort() {
     }
 }
 
+void PMergeMe::printResult() {
+    std::cout << "Before:";
+    for (std::vector<std::string>::iterator it = _input.begin(); it != _input.end(); ++it) {
+        std::cout << " " << *it;
+    }
+    std::cout << std::endl;
+    std::cout << "After:";
+    for (std::list<double>::iterator it = _output.begin(); it != _output.end(); ++it) {
+        std::cout << " " << *it;
+    }
+    std::cout << std::endl;
+    std::cout << "Time needed: " << this->_timeNeeded << std::endl;
+}
+
 void PMergeMe::sort() {
+    this->_begin = clock();
     this->splitIntoPairs();
     this->sortPairs();
     this->insertionSortPairs();
     this->finalSort();
-    for (pairsIter it = _pairs.begin(); it != _pairs.end(); ++it) {
+    this->_end = clock();
+    this->_timeNeeded = (double)(this->_end - this->_begin) / CLOCKS_PER_SEC;
+    this->printResult();
+   /*  for (pairsIter it = _pairs.begin(); it != _pairs.end(); ++it) {
         std::cout << (*it)[0] << " " << (*it)[1] << std::endl;
-    }
-    for (std::list<double>::iterator it = _output.begin(); it != _output.end(); ++it) {
-        std::cout << *it << std::endl;
-    } 
+    } */
+    
 }
 //canonical
 PMergeMe::PMergeMe(char **argv) {
