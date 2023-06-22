@@ -1,11 +1,11 @@
-#include "PMergeMe.hpp"
+#include "PmergeMe.hpp"
 
 int main(int argc, char **argv)
 {
     if (argc < 2) {
         std::cout << "Error" << std::endl;
     } else {
-        PMergeMe mergeLst((argv + 1));
+        PmergeMe mergeLst((argv + 1));
         clock_t begin = clock();
         mergeLst.sort();
         clock_t end = clock();

@@ -8,21 +8,22 @@
 # include <sstream>
 # include <cmath>
 # include <sys/time.h>
+#include <iomanip>
 
 typedef std::list<std::array<double, 2>>::iterator pairsIter;
 typedef std::vector<std::array<double, 2>>::iterator pairsIterVec;
 typedef std::vector<std::string>::iterator inpIter;
 typedef std::string::iterator strIter;
 
-class PMergeMe
+class PmergeMe
 {
     public:
         void sort();
-        PMergeMe& operator=(const PMergeMe& rhs);
-        PMergeMe(const PMergeMe& src);
-        PMergeMe(char **argv);
-        PMergeMe(){}
-        ~PMergeMe(){}
+        PmergeMe& operator=(const PmergeMe& rhs);
+        PmergeMe(const PmergeMe& src);
+        PmergeMe(char **argv);
+        PmergeMe(){}
+        ~PmergeMe(){}
     private:
         //List
         void splitIntoPairsLst();

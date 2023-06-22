@@ -1,8 +1,8 @@
 CC=c++
 CPPFLAGS=-Werror -Wextra -Wall -std=c++98
-NAME=PMergeMe
-SRC=main.cpp PMergeMe.cpp
-INC=PMergeMe.hpp
+NAME=PmergeMe
+SRC=main.cpp PmergeMe.cpp
+INC=PmergeMe.hpp
 header=.header
 
 all : $(NAME)
