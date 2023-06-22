@@ -7,8 +7,10 @@
 # include <iostream>
 # include <sstream>
 # include <cmath>
+# include <sys/time.h>
 
 typedef std::list<std::array<double, 2>>::iterator pairsIter;
+typedef std::vector<std::array<double, 2>>::iterator pairsIterVec;
 typedef std::vector<std::string>::iterator inpIter;
 typedef std::string::iterator strIter;
 
@@ -22,24 +24,45 @@ class PMergeMe
         PMergeMe(){}
         ~PMergeMe(){}
     private:
-        void splitIntoPairs();
-        void sortPairs();
-        void insertionSortPairs();
-        void finalSort();
-        int getNextJacobsthalNum(int iterCount, int currentNum);
-        void insertPendNum(int tagNum);
-        double getElementByIndex(int index);
+        //List
+        void splitIntoPairsLst();
+        void sortPairsLst();
+        void insertionSortPairsLst();
+        void finalSortLst();
+        void insertPendNumLst(int tagNum);
+        void printResultLst();
+        void sortLst();
+
+        //Vector
+        void splitIntoPairsVec();
+        void sortPairsVec();
+        void insertionSortPairsVec();
+        void finalSortVec();
+        void insertPendNumVec(int tagNum);
+        void printResultVec();
+        void sortVec();
+
         void printResult();
-        std::list<double>::iterator getIteratorByIndex(int index);
+        double getElementByIndex(std::list<double>::iterator it, int index);
+        int getNextJacobsthalNum(int iterCount, int currentNum);
+        std::list<double>::iterator getIteratorByIndex(std::list<double>::iterator it, int index);
+
         int _size;
-        std::list<std::array<double, 2>> _pairs;
-        std::list<double> _output;
-        std::vector<double> _pend;
         std::vector<std::string> _input;
         double  _straddler;
-        clock_t _begin;
-        clock_t _end;
-        double _timeNeeded;
+        uint64_t _begin;
+        uint64_t _end;
+        uint64_t _timeNeeded;
+
+        //List
+        std::list<std::array<double, 2>> _pairsLst;
+        std::list<double> _outputLst;
+        std::list<double> _pendLst;
+
+        //Vector
+        std::vector<std::array<double, 2>> _pairsVec;
+        std::vector<double> _outputVec;
+        std::vector<double> _pendVec;
 };
 
 #endif
