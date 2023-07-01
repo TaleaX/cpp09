@@ -2,13 +2,14 @@ CC=c++
 CPPFLAGS=-Werror -Wextra -Wall -std=c++98
 NAME=RPN
 SRC=main.cpp RPN.cpp
+OBJ=main.p RPN.o
 INC=RPN.hpp
 header=.header
 
 all : $(NAME)
 
-$(NAME) : $(header) $(SRC) $(INC)
-	@$(CC) $(SRC) $(INC) -o $(NAME)
+$(NAME) : $(header) $(SRC)
+	@$(CC) $(SRC) -o $(NAME)
 	@echo "$(GREEN)Done$(RESET)"
 
 $(header) :
@@ -22,7 +23,7 @@ $(header) :
 	@echo	"░░░░╚═╝░░░╚═════╝░╚══════╝╚═╝░░╚═╝╚═╝░░╚══╝╚══════╝░"
 	@echo	"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 clean:
-	@rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJ)
 
 fclean: clean
 	@rm -f $(NAME) .header
