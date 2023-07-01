@@ -1,5 +1,5 @@
 #ifndef __BITEXCHANGE__
-# define __BITEXHCHANGE__
+# define __BITEXCHANGE__
 # include <map>
 # include <string>
 # include <iostream>
@@ -10,12 +10,6 @@
 class BitcoinExchange
 {
     public:
-        class BadInput : public std::exception {
-            public:
-                virtual std::string what(std::string line) const throw() {
-                    return ("Error: bad input => " + line);
-                }
-        };
         class NegativeNumber : public std::exception {
             public:
                 virtual const char* what() const throw() {
@@ -28,6 +22,14 @@ class BitcoinExchange
                     return ("Error: too large a number.");
                 }
         };
+        class BadInput : public std::exception {
+            public:
+                virtual std::string what(std::string line) const throw() {
+                    return ("Error: bad input => " + line);
+                }
+			private:
+				using std::exception::what;
+        };
         void readInputFile(std::string inpFile);
         BitcoinExchange& operator=(const BitcoinExchange& rhs);
         BitcoinExchange(const BitcoinExchange& src);
@@ -35,6 +37,7 @@ class BitcoinExchange
         ~BitcoinExchange(){}
     private:
         bool isCorrectDateFormate(int iterCounter, std::string val);
+		double getAmount(std::string numStr);
         int getDateId(std::string str);
         void printOutput(std::string date, double amount, double exchangeRate);
         std::map<int, double> _database;

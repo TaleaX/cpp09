@@ -29,9 +29,44 @@ int BitcoinExchange::getDateId(std::string str)
         nextPos = nextPos + val.length();
         ++iterCounter;
     }
+	if (idStr[4] == '0' && idStr[5] == '0')
+		idStr[5] = '1';
+	if (idStr[6] == '0' && idStr[7] == '0')
+		idStr[7] = '1';
     id = atoi(idStr.c_str());
+	if (id == -1) throw BitcoinExchange::BadInput();
     return id;
 }
+
+bool isNumber(std::string numStr)
+{
+    bool dot = false;
+    for (int i = 0; i < numStr.size(); ++i) {
+        if (i == 0 && numStr[i] == '-')
+            continue;
+        if (!dot && numStr[i] == '.') {
+            dot = true;
+            continue;
+        }
+        if (!isdigit(numStr[i]))
+            return false;
+    }
+    return true;
+}
+
+double BitcoinExchange::getAmount(std::string amountStr)
+{
+	double amount;
+
+	if (!isNumber(amountStr)) throw BitcoinExchange::BadInput();
+
+	amount = atof(amountStr.c_str());
+
+	if (amount < 0) throw BitcoinExchange::NegativeNumber();
+	if (amount > 1000) throw BitcoinExchange::Overflow();
+	return amount;
+}
+
 void BitcoinExchange::printOutput(std::string date, double amount, double exchangeRate)
 {
     std::cout << date << " => " << amount << " = " << amount * exchangeRate << std::endl;
@@ -43,6 +78,8 @@ void BitcoinExchange::readInputFile(std::string inp)
     std::ifstream inpFile;
     std::string line;
     std::string delim = " | ";
+	int id;
+	double amount;
 
     inpFile.open(inp);
     if (!inpFile)
@@ -58,11 +95,8 @@ void BitcoinExchange::readInputFile(std::string inp)
                 int countDelim = std::count(date.begin(), date.end(), '-');
                 if (countDelim > 2) throw BitcoinExchange::BadInput();
                 std::string amountStr = line.substr(delimPos + delim.length());
-                int id = this->getDateId(date);
-                if (id == -1) throw BitcoinExchange::BadInput();
-                double amount = atof(amountStr.c_str());
-                if (amount < 0) throw BitcoinExchange::NegativeNumber();
-                if (amount > 2147483647) throw BitcoinExchange::Overflow();
+                id = this->getDateId(date);
+            	amount = this->getAmount(amountStr);
                 for (std::map<int,double>::iterator it = this->_database.begin(); it != this->_database.end(); ++it) {
                     if (it->first == id) {
                         this->printOutput(date, amount, it->second);
