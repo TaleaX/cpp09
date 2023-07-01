@@ -228,25 +228,67 @@ void PmergeMe::insertionSortPairsVec() {
     }
 }
 
+// void PmergeMe::insertPendNumVec(int tagNum)
+// {
+//     int index = tagNum - 1;
+//     double pendValue = _pendVec[index];
+//     if (index == 0) {
+//         _outputVec.insert(_outputVec.begin(), pendValue);
+//     } else {
+//         double outputValue;
+//         std::vector<double>::iterator outputIter;
+//         for (int i = 0; i <= index; ++i) {
+//             outputValue = _outputVec[i];
+//             outputIter = _outputVec.begin() + i;
+//             //outputValue = this->getElementByIndex(_outputVec.begin(), i);
+//             //outputIter = this->getIteratorByIndex(_outputVec.begin(), i);
+//             if (pendValue <= outputValue) {
+//                 _outputVec.insert(outputIter, pendValue);
+//                 break;
+//             }
+//         }
+//     }
+// }
+
 void PmergeMe::insertPendNumVec(int tagNum)
 {
     int index = tagNum - 1;
     double pendValue = _pendVec[index];
+	bool found = false;
+	int m = index / 2;
+	int maxIndex = index;
+	int toBeCmp = maxIndex;
+	int minIndex;
     if (index == 0) {
         _outputVec.insert(_outputVec.begin(), pendValue);
     } else {
         double outputValue;
         std::vector<double>::iterator outputIter;
-        for (int i = 0; i <= index; ++i) {
-            outputValue = _outputVec[i];
-            outputIter = _outputVec.begin() + i;
-            //outputValue = this->getElementByIndex(_outputVec.begin(), i);
-            //outputIter = this->getIteratorByIndex(_outputVec.begin(), i);
-            if (pendValue <= outputValue) {
-                _outputVec.insert(outputIter, pendValue);
-                break;
-            }
-        }
+		while (!found) {
+			outputValue = _outputVec[m];
+        	outputIter = _outputVec.begin() + m;
+			if (pendValue < outputValue) {
+				maxIndex = m;
+				toBeCmp = toBeCmp / 2;
+				m = m - toBeCmp;
+			}
+			if (pendValue > outputValue) {
+				// maxIndex = maxIndex + maxIndex / 2;
+				maxIndex = maxIndex; // can be removed
+				toBeCmp = toBeCmp / 2;
+				m = m + toBeCmp;
+			}
+		}
+        // for (int i = 0; i <= index / 2; ++i) {
+        //     outputValue = _outputVec[i];
+        //     outputIter = _outputVec.begin() + i;
+        //     //outputValue = this->getElementByIndex(_outputVec.begin(), i);
+        //     //outputIter = this->getIteratorByIndex(_outputVec.begin(), i);
+        //     if (pendValue <= outputValue) {
+        //         _outputVec.insert(outputIter, pendValue);
+        //         break;
+        //     }
+        // }
     }
 }
 
@@ -276,6 +318,35 @@ void PmergeMe::finalSortVec() {
             break;
     }
 }
+// void PmergeMe::finalSortVec() {
+// 	for (pairsIterVec it = _pairsVec.begin(); it != _pairsVec.end(); ++it) {
+//         _outputVec.push_back((*it)[1]);
+//         _pendVec.push_back((*it)[0]);
+//     }
+// 	if (this->_size % 2 != 0)
+//         _pendVec.push_back(this->_straddler);
+// 	// int jacobsthal = 0;
+//     // int prevJacobstahl = 0;
+
+//     // for (int i = 0; i < _pendVec.size() + 2; ++i) {
+//     //     prevJacobstahl = jacobsthal;
+//     //     jacobsthal = this->getNextJacobsthalNum(i, jacobsthal);
+//     //     if (prevJacobstahl == 0)
+//     //         continue;
+//     //     if (jacobsthal == 1 && prevJacobstahl == 1)
+//     //         this->insertPendNumVec(1);
+//     //     if (jacobsthal > _pendVec.size())
+//     //         jacobsthal = _pendVec.size();
+//     //     for (int j = jacobsthal; j > prevJacobstahl; --j) {
+//     //         this->insertPendNumVec(j);
+//     //     }
+//     //     if (jacobsthal == _pendVec.size())
+//     //         break;
+//     // }
+// 	for (int i = 0; i < _pendVec.size(); ++i) {
+// 		if (i == 0)
+// 	}
+// }
 
 void PmergeMe::printResultVec() {
    /*  std::cout << "Before:";
@@ -289,7 +360,7 @@ void PmergeMe::printResultVec() {
     }
     std::cout << std::endl; */
     double time = (double)this->_timeNeeded / 1000000.0;
-    std::cout << "Time to process range of " << this->_size << " elements with std::vector needed " << std::fixed << std::setprecision(7) << time << " us" << std::endl;
+    std::cout << "Time to process range of " << this->_size << " elements with std::vector needed " << std::fixed << std::setprecision(7) << time << "us" << std::endl;
 }
 
 void PmergeMe::sortVec() {
@@ -331,7 +402,7 @@ void PmergeMe::sort() {
     //std::cout.precision(ss);
     std::cout.unsetf(std::ios::fixed);
     std::cout << std::setprecision(-1);
-    this->printResult();
+    // this->printResult();
 }
 
 //canonical

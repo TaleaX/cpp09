@@ -10,8 +10,8 @@
 # include <sys/time.h>
 #include <iomanip>
 
-typedef std::list<std::array<double, 2>>::iterator pairsIter;
-typedef std::vector<std::array<double, 2>>::iterator pairsIterVec;
+typedef std::list< std::array<double, 2> >::iterator pairsIter;
+typedef std::vector< std::array<double, 2> >::iterator pairsIterVec;
 typedef std::vector<std::string>::iterator inpIter;
 typedef std::string::iterator strIter;
 
@@ -56,12 +56,12 @@ class PmergeMe
         uint64_t _timeNeeded;
 
         //List
-        std::list<std::array<double, 2>> _pairsLst;
+        std::list< std::array<double, 2> > _pairsLst;
         std::list<double> _outputLst;
         std::list<double> _pendLst;
 
         //Vector
-        std::vector<std::array<double, 2>> _pairsVec;
+        std::vector< std::array<double, 2> > _pairsVec;
         std::vector<double> _outputVec;
         std::vector<double> _pendVec;
 };
