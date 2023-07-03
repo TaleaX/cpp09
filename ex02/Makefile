@@ -9,7 +9,7 @@ header=.header
 all : $(NAME)
 
 $(NAME) : $(header) $(SRC)
-	@$(CC) $(CPPFLAGS) $(SRC) -o $(NAME)
+	@$(CC) $(SRC) -o $(NAME)
 	@echo "$(GREEN)Done$(RESET)"
 
 $(header) :

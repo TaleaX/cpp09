@@ -50,7 +50,7 @@ class PmergeMe
         size_t getNextJacobsthalNum(size_t iterCount, size_t currentNum);
         std::list<double>::iterator getIteratorByIndex(std::list<double>::iterator it, size_t index);
 
-        int _size;
+        size_t _size;
         double  _straddler;
         uint64_t _begin;
         uint64_t _end;

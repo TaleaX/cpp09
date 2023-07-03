@@ -101,9 +101,9 @@ void PmergeMe::insertPendNumLst(size_t tagNum, size_t insertionCounter)
 {
     size_t index = tagNum - 1;
     double pendValue = this->getElementByIndex(_pendLst.begin(), index);
-	size_t m;
-	size_t low = 0;
-    size_t high = index + insertionCounter;
+	int m;
+	int low = 0;
+    int high = index + insertionCounter;
     if (index == 0) {
         _outputLst.push_front(pendValue);
     } else {
@@ -248,9 +248,9 @@ void PmergeMe::insertPendNumVec(size_t tagNum, size_t insertionCounter)
 {
     size_t index = tagNum - 1;
     double pendValue = _pendVec[index];
-	size_t m;
-	size_t low = 0;
-    size_t high = index + insertionCounter;
+	int m;
+	int low = 0;
+    int high = index + insertionCounter;
     if (index == 0) {
         _outputVec.insert(_outputVec.begin(), pendValue);
     } else {
