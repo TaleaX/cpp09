@@ -22,7 +22,6 @@ class PmergeMe
         void sort(char **argv);
         PmergeMe& operator=(const PmergeMe& rhs);
         PmergeMe(const PmergeMe& src);
-        //PmergeMe();
         PmergeMe(){}
         ~PmergeMe(){}
     private:

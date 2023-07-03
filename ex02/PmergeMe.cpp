@@ -387,26 +387,7 @@ void PmergeMe::initDataLst(char **argv) {
 }
 
 //canonical
-/* PmergeMe::PmergeMe(char **argv) {
-    /*std::stringstream iss(input);
-    std::string token;
-    while (getline(iss, token, ' ')) {
-        this->_input.push_back(token);
-    }
-    std::string input;
-    while (*argv) {
-        input.append(*argv);
-        this->_inputVec.push_back(input);
-        input = "\0";
-        ++argv;
-    }
-    this->_size = this->_input.size();
-    
-    
-    /*if (_size % 2 != 0)
-        std::cout << "straddler: " << _straddler << std::endl;
-}
- */
+
 PmergeMe::PmergeMe(const PmergeMe& src)
 {
     *this = src;
