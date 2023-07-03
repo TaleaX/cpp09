@@ -3,7 +3,7 @@
 bool isNumber(std::string numStr)
 {
     bool dot = false;
-    for (int i = 0; i < numStr.size(); ++i) {
+    for (size_t i = 0; i < numStr.size(); ++i) {
         if (i == 0 && numStr[i] == '-' && numStr.size() > 1)
             continue;
         if (!dot && numStr[i] == '.') {
@@ -24,27 +24,27 @@ uint64_t	get_current_microsec(void)
 	return (time.tv_sec * 1000000 + time.tv_usec);
 }
 
-double PmergeMe::getElementByIndex(std::list<double>::iterator it, int index) {
+double PmergeMe::getElementByIndex(std::list<double>::iterator it, size_t index) {
 
     //std::list<double>::iterator it = _output.begin();
     std::advance(it, index);
     return *it;
 }
 
-std::list<double>::iterator PmergeMe::getIteratorByIndex(std::list<double>::iterator it, int index) {
+std::list<double>::iterator PmergeMe::getIteratorByIndex(std::list<double>::iterator it, size_t index) {
 
     //std::list<double>::iterator it = _output.begin();
     std::advance(it, index);
     return it;
 }
 
-int PmergeMe::getNextJacobsthalNum(int iterCount, int currentNum) {
+size_t PmergeMe::getNextJacobsthalNum(size_t iterCount, size_t currentNum) {
     return (pow(2, iterCount) - currentNum);
 }
 
 //List
 void PmergeMe::splitIntoPairsLst() {
-    int counter = 0;
+    size_t counter = 0;
     std::array<double, 2> arr;
     for (inpIterLst it = _inputLst.begin(); it != _inputLst.end(); ++it) {
         //std::cout << "-" << *it << "-" << std::endl;
@@ -97,13 +97,13 @@ void PmergeMe::insertionSortPairsLst() {
     }
 }
 
-void PmergeMe::insertPendNumLst(int tagNum, int insertionCounter)
+void PmergeMe::insertPendNumLst(size_t tagNum, size_t insertionCounter)
 {
-    int index = tagNum - 1;
+    size_t index = tagNum - 1;
     double pendValue = this->getElementByIndex(_pendLst.begin(), index);
-	int m;
-	int low = 0;
-    int high = index + insertionCounter;
+	size_t m;
+	size_t low = 0;
+    size_t high = index + insertionCounter;
     if (index == 0) {
         _outputLst.push_front(pendValue);
     } else {
@@ -138,10 +138,10 @@ void PmergeMe::finalSortLst() {
     }
     if (this->_size % 2 != 0)
         _pendLst.push_back(this->_straddler);
-    int jacobsthal = 0;
-    int prevJacobstahl = 0;
-    int iterationCounter = 1;
-    for (int i = 0; i < _pendLst.size() + 2; ++i) {
+    size_t jacobsthal = 0;
+    size_t prevJacobstahl = 0;
+    size_t iterationCounter = 1;
+    for (size_t i = 0; i < _pendLst.size() + 2; ++i) {
         prevJacobstahl = jacobsthal;
         jacobsthal = this->getNextJacobsthalNum(i, jacobsthal);
         if (prevJacobstahl == 0)
@@ -150,7 +150,7 @@ void PmergeMe::finalSortLst() {
             this->insertPendNumLst(1, iterationCounter);
         if (jacobsthal > _pendLst.size())
             jacobsthal = _pendLst.size();
-        for (int j = jacobsthal; j > prevJacobstahl; --j) {
+        for (size_t j = jacobsthal; j > prevJacobstahl; --j) {
             this->insertPendNumLst(j, iterationCounter);
             iterationCounter++;
         }
@@ -191,7 +191,7 @@ void PmergeMe::sortLst(char **argv) {
 
 //Vec
 void PmergeMe::splitIntoPairsVec() {
-    int counter = 0;
+    size_t counter = 0;
     std::array<double, 2> arr;
     for (inpIter it = _inputVec.begin(); it != _inputVec.end(); ++it) {
         //std::cout << "-" << *it << "-" << std::endl;
@@ -244,13 +244,13 @@ void PmergeMe::insertionSortPairsVec() {
     }
 }
 
-void PmergeMe::insertPendNumVec(int tagNum, int insertionCounter)
+void PmergeMe::insertPendNumVec(size_t tagNum, size_t insertionCounter)
 {
-    int index = tagNum - 1;
+    size_t index = tagNum - 1;
     double pendValue = _pendVec[index];
-	int m;
-	int low = 0;
-    int high = index + insertionCounter;
+	size_t m;
+	size_t low = 0;
+    size_t high = index + insertionCounter;
     if (index == 0) {
         _outputVec.insert(_outputVec.begin(), pendValue);
     } else {
@@ -284,10 +284,10 @@ void PmergeMe::finalSortVec() {
     }
     if (this->_size % 2 != 0)
         _pendVec.push_back(this->_straddler);
-    int jacobsthal = 0;
-    int prevJacobstahl = 0;
-    int insertionCounter = 1;
-    for (int i = 0; i < _pendVec.size() + 2; ++i) {
+    size_t jacobsthal = 0;
+    size_t prevJacobstahl = 0;
+    size_t insertionCounter = 1;
+    for (size_t i = 0; i < _pendVec.size() + 2; ++i) {
         prevJacobstahl = jacobsthal;
         jacobsthal = this->getNextJacobsthalNum(i, jacobsthal);
         if (prevJacobstahl == 0)
@@ -296,7 +296,7 @@ void PmergeMe::finalSortVec() {
             this->insertPendNumVec(1, insertionCounter);
         if (jacobsthal > _pendVec.size())
             jacobsthal = _pendVec.size();
-        for (int j = jacobsthal; j > prevJacobstahl; --j) {
+        for (size_t j = jacobsthal; j > prevJacobstahl; --j) {
             this->insertPendNumVec(j, insertionCounter);
             insertionCounter++;
         }

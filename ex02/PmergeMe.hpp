@@ -30,7 +30,7 @@ class PmergeMe
         void sortPairsLst();
         void insertionSortPairsLst();
         void finalSortLst();
-        void insertPendNumLst(int tagNum, int insertionCounter);
+        void insertPendNumLst(size_t tagNum, size_t insertionCounter);
         void printResultLst();
         void sortLst(char **argv);
         void initDataLst(char **argv);
@@ -40,15 +40,15 @@ class PmergeMe
         void sortPairsVec();
         void insertionSortPairsVec();
         void finalSortVec();
-        void insertPendNumVec(int tagNum, int insertionCounter);
+        void insertPendNumVec(size_t tagNum, size_t insertionCounter);
         void printResultVec();
         void sortVec(char **argv);
         void initDataVec(char **argv);
 
         void printResult();
-        double getElementByIndex(std::list<double>::iterator it, int index);
-        int getNextJacobsthalNum(int iterCount, int currentNum);
-        std::list<double>::iterator getIteratorByIndex(std::list<double>::iterator it, int index);
+        double getElementByIndex(std::list<double>::iterator it, size_t index);
+        size_t getNextJacobsthalNum(size_t iterCount, size_t currentNum);
+        std::list<double>::iterator getIteratorByIndex(std::list<double>::iterator it, size_t index);
 
         int _size;
         double  _straddler;
