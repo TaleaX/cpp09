@@ -46,20 +46,20 @@ int PmergeMe::getNextJacobsthalNum(int iterCount, int currentNum) {
 void PmergeMe::splitIntoPairsLst() {
     int counter = 0;
     std::array<double, 2> arr;
-    for (inpIter it = _input.begin(); it != _input.end(); ++it) {
+    for (inpIterLst it = _inputLst.begin(); it != _inputLst.end(); ++it) {
         //std::cout << "-" << *it << "-" << std::endl;
         if (!isNumber(*it)) {
             std::cout << "Error" << std::endl;
             exit(0);
         }
         arr[counter] = atof((*it).c_str());
-        if (it + 1 == _input.end() && counter == 0) {
-            this->_straddler = arr[counter];
-        }
         if (++counter == 2) {
             this->_pairsLst.push_back(arr);
             counter = 0;
         }
+    }
+    if (counter == 1) {
+        this->_straddler = arr[0];
     }
 }
 
@@ -97,23 +97,36 @@ void PmergeMe::insertionSortPairsLst() {
     }
 }
 
-void PmergeMe::insertPendNumLst(int tagNum)
+void PmergeMe::insertPendNumLst(int tagNum, int insertionCounter)
 {
     int index = tagNum - 1;
     double pendValue = this->getElementByIndex(_pendLst.begin(), index);
+	int m;
+	int low = 0;
+    int high = index + insertionCounter;
     if (index == 0) {
         _outputLst.push_front(pendValue);
     } else {
         double outputValue;
         std::list<double>::iterator outputIter;
-        for (int i = 0; i <= index; ++i) {
-            outputValue = this->getElementByIndex(_outputLst.begin(), i);
-            outputIter = this->getIteratorByIndex(_outputLst.begin(), i);
-            if (pendValue <= outputValue) {
-                _outputLst.insert(outputIter, pendValue);
+		while (low <= high) {
+            m = low + (high - low) / 2;
+			outputValue = this->getElementByIndex(_outputLst.begin(), m);
+            if (pendValue == outputValue)
+                break;
+            else if (low == high && pendValue > outputValue) {
+                m += 1;
                 break;
             }
-        }
+			else if (pendValue < outputValue) {
+				high = m - 1;
+			}
+			else if (pendValue > outputValue) {
+				low = m + 1;
+			}
+		}
+        outputIter = this->getIteratorByIndex(_outputLst.begin(), m);
+        _outputLst.insert(outputIter, pendValue); 
     }
 }
 
@@ -127,17 +140,19 @@ void PmergeMe::finalSortLst() {
         _pendLst.push_back(this->_straddler);
     int jacobsthal = 0;
     int prevJacobstahl = 0;
+    int iterationCounter = 1;
     for (int i = 0; i < _pendLst.size() + 2; ++i) {
         prevJacobstahl = jacobsthal;
         jacobsthal = this->getNextJacobsthalNum(i, jacobsthal);
         if (prevJacobstahl == 0)
             continue;
         if (jacobsthal == 1 && prevJacobstahl == 1)
-            this->insertPendNumLst(1);
+            this->insertPendNumLst(1, iterationCounter);
         if (jacobsthal > _pendLst.size())
             jacobsthal = _pendLst.size();
         for (int j = jacobsthal; j > prevJacobstahl; --j) {
-            this->insertPendNumLst(j);
+            this->insertPendNumLst(j, iterationCounter);
+            iterationCounter++;
         }
         if (jacobsthal == _pendLst.size())
             break;
@@ -145,8 +160,8 @@ void PmergeMe::finalSortLst() {
 }
 
 void PmergeMe::printResultLst() {
-    /* std::cout << "Before:";
-    for (std::vector<std::string>::iterator it = _input.begin(); it != _input.end(); ++it) {
+    /*std::cout << "Before:";
+    for (std::list<std::string>::iterator it = _inputLst.begin(); it != _inputLst.end(); ++it) {
         std::cout << " " << *it;
     }
     std::cout << std::endl;
@@ -154,13 +169,14 @@ void PmergeMe::printResultLst() {
     for (std::list<double>::iterator it = _outputLst.begin(); it != _outputLst.end(); ++it) {
         std::cout << " " << *it;
     }
-    std::cout << std::endl; */
-    double time = (double)this->_timeNeeded / 1000000.0;
+    std::cout << std::endl;*/
+    double time = (double)this->_timeNeeded; // / 1000000.0;
     std::cout << "Time to process range of " << this->_size << " elements with std::list needed " << std::fixed << std::setprecision(7) << time << " us" << std::endl;
 
 }
 
-void PmergeMe::sortLst() {
+void PmergeMe::sortLst(char **argv) {
+    this->initDataLst(argv);
     this->splitIntoPairsLst();
     this->sortPairsLst();
     this->insertionSortPairsLst();
@@ -177,14 +193,14 @@ void PmergeMe::sortLst() {
 void PmergeMe::splitIntoPairsVec() {
     int counter = 0;
     std::array<double, 2> arr;
-    for (inpIter it = _input.begin(); it != _input.end(); ++it) {
+    for (inpIter it = _inputVec.begin(); it != _inputVec.end(); ++it) {
         //std::cout << "-" << *it << "-" << std::endl;
         if (!isNumber(*it)) {
             std::cout << "Error" << std::endl;
             exit(0);
         }
         arr[counter] = atof((*it).c_str());
-        if (it + 1 == _input.end() && counter == 0) {
+        if (it + 1 == _inputVec.end() && counter == 0) {
             this->_straddler = arr[counter];
         }
         if (++counter == 2) {
@@ -228,70 +244,38 @@ void PmergeMe::insertionSortPairsVec() {
     }
 }
 
-// void PmergeMe::insertPendNumVec(int tagNum)
-// {
-//     int index = tagNum - 1;
-//     double pendValue = _pendVec[index];
-//     if (index == 0) {
-//         _outputVec.insert(_outputVec.begin(), pendValue);
-//     } else {
-//         double outputValue;
-//         std::vector<double>::iterator outputIter;
-//         for (int i = 0; i <= index; ++i) {
-//             outputValue = _outputVec[i];
-//             outputIter = _outputVec.begin() + i;
-//             //outputValue = this->getElementByIndex(_outputVec.begin(), i);
-//             //outputIter = this->getIteratorByIndex(_outputVec.begin(), i);
-//             if (pendValue <= outputValue) {
-//                 _outputVec.insert(outputIter, pendValue);
-//                 break;
-//             }
-//         }
-//     }
-// }
-
-void PmergeMe::insertPendNumVec(int tagNum)
+void PmergeMe::insertPendNumVec(int tagNum, int insertionCounter)
 {
     int index = tagNum - 1;
     double pendValue = _pendVec[index];
-	bool found = false;
-	int m = index / 2;
-	int maxIndex = index;
-	int toBeCmp = maxIndex;
-	int minIndex;
+	int m;
+	int low = 0;
+    int high = index + insertionCounter;
     if (index == 0) {
         _outputVec.insert(_outputVec.begin(), pendValue);
     } else {
         double outputValue;
         std::vector<double>::iterator outputIter;
-		while (!found) {
+		while (low <= high) {
+            m = low + (high - low) / 2;
 			outputValue = _outputVec[m];
-        	outputIter = _outputVec.begin() + m;
-			if (pendValue < outputValue) {
-				maxIndex = m;
-				toBeCmp = toBeCmp / 2;
-				m = m - toBeCmp;
+            if (pendValue == outputValue)
+                break;
+            else if (low == high && pendValue > outputValue) {
+                m += 1;
+                break;
+            }
+			else if (pendValue < outputValue) {
+				high = m - 1;
 			}
-			if (pendValue > outputValue) {
-				// maxIndex = maxIndex + maxIndex / 2;
-				maxIndex = maxIndex; // can be removed
-				toBeCmp = toBeCmp / 2;
-				m = m + toBeCmp;
+			else if (pendValue > outputValue) {
+				low = m + 1;
 			}
 		}
-        // for (int i = 0; i <= index / 2; ++i) {
-        //     outputValue = _outputVec[i];
-        //     outputIter = _outputVec.begin() + i;
-        //     //outputValue = this->getElementByIndex(_outputVec.begin(), i);
-        //     //outputIter = this->getIteratorByIndex(_outputVec.begin(), i);
-        //     if (pendValue <= outputValue) {
-        //         _outputVec.insert(outputIter, pendValue);
-        //         break;
-        //     }
-        // }
+        outputIter = _outputVec.begin() + m;
+        _outputVec.insert(outputIter, pendValue); 
     }
 }
-
 
 void PmergeMe::finalSortVec() {
     for (pairsIterVec it = _pairsVec.begin(); it != _pairsVec.end(); ++it) {
@@ -302,51 +286,25 @@ void PmergeMe::finalSortVec() {
         _pendVec.push_back(this->_straddler);
     int jacobsthal = 0;
     int prevJacobstahl = 0;
+    int insertionCounter = 1;
     for (int i = 0; i < _pendVec.size() + 2; ++i) {
         prevJacobstahl = jacobsthal;
         jacobsthal = this->getNextJacobsthalNum(i, jacobsthal);
         if (prevJacobstahl == 0)
             continue;
         if (jacobsthal == 1 && prevJacobstahl == 1)
-            this->insertPendNumVec(1);
+            this->insertPendNumVec(1, insertionCounter);
         if (jacobsthal > _pendVec.size())
             jacobsthal = _pendVec.size();
         for (int j = jacobsthal; j > prevJacobstahl; --j) {
-            this->insertPendNumVec(j);
+            this->insertPendNumVec(j, insertionCounter);
+            insertionCounter++;
         }
         if (jacobsthal == _pendVec.size())
             break;
     }
 }
-// void PmergeMe::finalSortVec() {
-// 	for (pairsIterVec it = _pairsVec.begin(); it != _pairsVec.end(); ++it) {
-//         _outputVec.push_back((*it)[1]);
-//         _pendVec.push_back((*it)[0]);
-//     }
-// 	if (this->_size % 2 != 0)
-//         _pendVec.push_back(this->_straddler);
-// 	// int jacobsthal = 0;
-//     // int prevJacobstahl = 0;
 
-//     // for (int i = 0; i < _pendVec.size() + 2; ++i) {
-//     //     prevJacobstahl = jacobsthal;
-//     //     jacobsthal = this->getNextJacobsthalNum(i, jacobsthal);
-//     //     if (prevJacobstahl == 0)
-//     //         continue;
-//     //     if (jacobsthal == 1 && prevJacobstahl == 1)
-//     //         this->insertPendNumVec(1);
-//     //     if (jacobsthal > _pendVec.size())
-//     //         jacobsthal = _pendVec.size();
-//     //     for (int j = jacobsthal; j > prevJacobstahl; --j) {
-//     //         this->insertPendNumVec(j);
-//     //     }
-//     //     if (jacobsthal == _pendVec.size())
-//     //         break;
-//     // }
-// 	for (int i = 0; i < _pendVec.size(); ++i) {
-// 		if (i == 0)
-// 	}
-// }
 
 void PmergeMe::printResultVec() {
    /*  std::cout << "Before:";
@@ -359,11 +317,12 @@ void PmergeMe::printResultVec() {
         std::cout << " " << *it;
     }
     std::cout << std::endl; */
-    double time = (double)this->_timeNeeded / 1000000.0;
-    std::cout << "Time to process range of " << this->_size << " elements with std::vector needed " << std::fixed << std::setprecision(7) << time << "us" << std::endl;
+    double time = (double)this->_timeNeeded;// / 1000000.0;
+    std::cout << "Time to process range of " << this->_size << " elements with std::vector needed " << std::fixed << std::setprecision(7) << time << " us" << std::endl;
 }
 
-void PmergeMe::sortVec() {
+void PmergeMe::sortVec(char **argv) {
+    this->initDataVec(argv);
     this->splitIntoPairsVec();
     this->sortPairsVec();
     this->insertionSortPairsVec();
@@ -375,7 +334,7 @@ void PmergeMe::sortVec() {
 
 void PmergeMe::printResult() {
     std::cout << "Before:";
-    for (std::vector<std::string>::iterator it = _input.begin(); it != _input.end(); ++it) {
+    for (std::vector<std::string>::iterator it = _inputVec.begin(); it != _inputVec.end(); ++it) {
         std::cout << " " << *it;
     }
     std::cout << std::endl;
@@ -385,16 +344,16 @@ void PmergeMe::printResult() {
     }
     std::cout << std::endl;
 }
-void PmergeMe::sort() {
+void PmergeMe::sort(char **argv) {
     //std::streamsize ss = std::cout.precision();
     this->_begin = get_current_microsec();
-    this->sortLst();
+    this->sortLst(argv);
     this->_end = get_current_microsec();
     this->_timeNeeded = this->_end - this->_begin;
     this->printResultLst();
 
     this->_begin = get_current_microsec();
-    this->sortVec();
+    this->sortVec(argv);
     this->_end = get_current_microsec();
     this->_timeNeeded = this->_end - this->_begin;
     this->printResultVec();
@@ -402,20 +361,42 @@ void PmergeMe::sort() {
     //std::cout.precision(ss);
     std::cout.unsetf(std::ios::fixed);
     std::cout << std::setprecision(-1);
-    // this->printResult();
+    this->printResult();
+}
+
+void PmergeMe::initDataVec(char **argv) {
+    std::string input;
+    while (*argv) {
+        input.append(*argv);
+        this->_inputVec.push_back(input);
+        input = "\0";
+        ++argv;
+    }
+    this->_size = this->_inputVec.size();
+}
+
+void PmergeMe::initDataLst(char **argv) {
+    std::string input;
+    while (*argv) {
+        input.append(*argv);
+        this->_inputLst.push_back(input);
+        input = "\0";
+        ++argv;
+    }
+    this->_size = this->_inputLst.size();
 }
 
 //canonical
-PmergeMe::PmergeMe(char **argv) {
+/* PmergeMe::PmergeMe(char **argv) {
     /*std::stringstream iss(input);
     std::string token;
     while (getline(iss, token, ' ')) {
         this->_input.push_back(token);
-    }*/
+    }
     std::string input;
     while (*argv) {
         input.append(*argv);
-        this->_input.push_back(input);
+        this->_inputVec.push_back(input);
         input = "\0";
         ++argv;
     }
@@ -423,9 +404,9 @@ PmergeMe::PmergeMe(char **argv) {
     
     
     /*if (_size % 2 != 0)
-        std::cout << "straddler: " << _straddler << std::endl;*/
+        std::cout << "straddler: " << _straddler << std::endl;
 }
-
+ */
 PmergeMe::PmergeMe(const PmergeMe& src)
 {
     *this = src;
