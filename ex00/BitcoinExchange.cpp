@@ -143,6 +143,7 @@ void BitcoinExchange::readInputFile(std::string inp)
                         this->printOutput(date, amount, it->second);
                         break;
                     } else if (it->first > id) {
+						if (it == this->_database.begin()) throw BitcoinExchange::BadInput();
                         --it;
                         this->printOutput(date, amount, it->second);
                         break;
