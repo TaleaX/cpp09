@@ -37,6 +37,7 @@ class BitcoinExchange
         ~BitcoinExchange(){}
     private:
         bool isCorrectDateFormate(int iterCounter, std::string val);
+		bool isCorrectDateFormate(std::string str);
 		double getAmount(std::string numStr);
         int getDateId(std::string str);
         void printOutput(std::string date, double amount, double exchangeRate);
