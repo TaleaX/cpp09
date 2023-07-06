@@ -39,6 +39,10 @@ void RPN::calc()
             std::cout << "ERROR" << std::endl;
             exit(0);
         }
+		if (this->_input.size() == 1) {
+			std::cout << "result: " << *it << std::endl;
+			exit(0);
+		}
         if (this->isOperator(*it)) {
             if (this->_stack.size() < 2) {
                 std::cout << "ERROR" << std::endl;
