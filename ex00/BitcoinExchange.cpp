@@ -52,25 +52,27 @@ int BitcoinExchange::getDateId(std::string str)
 {
     std::istringstream iss(str);
     std::string val;
-    std::string idStr = "00000000";
+    std::string idStr;// = "00000000";
     int id;
     int iterCounter = 0;
-    size_t nextPos = 0;
+    //size_t nextPos = 0;
 
     while (getline(iss, val, '-')) {
         // if (!isCorrectDateFormate(iterCounter, val))
         //     return -1;
         /*if (val[0] == '0')
             val.replace(0, 1, "");*/
-        //idStr += val;
-        idStr.replace(nextPos, val.length(), val);
-        nextPos = nextPos + val.length();
+        idStr += val;
+        //idStr.replace(nextPos, val.length(), val);
+        //nextPos = nextPos + val.length();
         ++iterCounter;
     }
-	if (idStr[4] == '0' && idStr[5] == '0')
-		idStr[5] = '1';
-	if (idStr[6] == '0' && idStr[7] == '0')
-		idStr[7] = '1';
+	if (iterCounter != 3)
+		return -1;
+	// if (idStr[4] == '0' && idStr[5] == '0')
+	// 	idStr[5] = '1';
+	// if (idStr[6] == '0' && idStr[7] == '0')
+	// 	idStr[7] = '1';
 	if (!isCorrectDateFormate(idStr)) {
 		return -1;
 	}
@@ -120,15 +122,22 @@ void BitcoinExchange::readInputFile(std::string inp)
     std::string delim = " | ";
 	int id;
 	double amount;
+	bool firstIter = true;
 
     inpFile.open(inp);
     if (!inpFile)
         std::cerr << "Error: could not open file" << std::endl;
     else {
         while(std::getline(inpFile, line)) {
-            if (line == "date | value")
-                continue;
             try {
+				if (firstIter && line != "date | value") {
+					firstIter = false;
+					throw BitcoinExchange::BadInput();
+				}
+				else if (firstIter && line == "date | value") {
+					firstIter = false;
+					continue;
+				}
                 size_t delimPos = line.find(delim);
                 if (delimPos == std::string::npos) throw BitcoinExchange::BadInput();
                 std::string date = line.substr(0, delimPos);
