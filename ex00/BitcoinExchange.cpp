@@ -128,7 +128,7 @@ void BitcoinExchange::readInputFile(std::string inp)
 	double amount;
 	bool firstIter = true;
 
-    inpFile.open(inp);
+    inpFile.open(inp.c_str());
     if (!inpFile)
         std::cerr << "Error: could not open file" << std::endl;
     else {
