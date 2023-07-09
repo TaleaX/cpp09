@@ -29,13 +29,17 @@ bool BitcoinExchange::isCorrectDateFormate(std::string numStr)
 	std::string year = numStr.substr(0,4);
 	std::string month = numStr.substr(4, 2);
 	std::string day = numStr.substr(6, 2);
-	// int yearNum = atoi(year.c_str());
+	int yearNum = atoi(year.c_str());
 	int monthNum = atoi(month.c_str());
 	int dayNum = atoi(day.c_str());
 	if (monthNum > 12)
 		return false;
-	if (monthNum == 2 && dayNum > 28)
-		return false;
+	if (monthNum == 2) { // && dayNum > 28)
+        if ((yearNum % 4 != 0 || (yearNum % 100 == 0 && yearNum % 400 != 0)) && dayNum > 28)
+		    return false;
+        else if (dayNum > 29)
+            return false;
+    }
 	if (monthNum % 2 == 0 && monthNum <= 7 && dayNum > 30)
 		return false;
 	if (monthNum % 2 != 0 && monthNum <= 7 && dayNum > 31)
