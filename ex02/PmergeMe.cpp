@@ -45,21 +45,24 @@ size_t PmergeMe::getNextJacobsthalNum(size_t iterCount, size_t currentNum) {
 //List
 void PmergeMe::splitIntoPairsLst() {
     size_t counter = 0;
-    std::array<double, 2> arr;
+    std::pair<double, double> arr;
     for (inpIterLst it = _inputLst.begin(); it != _inputLst.end(); ++it) {
         //std::cout << "-" << *it << "-" << std::endl;
         if (!isNumber(*it)) {
             std::cout << "Error" << std::endl;
             exit(0);
         }
-        arr[counter] = atof((*it).c_str());
+		if (counter == 0)
+        	arr.first = atof((*it).c_str());
+		else if (counter == 1)
+			arr.second = atof((*it).c_str());
         if (++counter == 2) {
             this->_pairsLst.push_back(arr);
             counter = 0;
         }
     }
     if (counter == 1) {
-        this->_straddler = arr[0];
+        this->_straddler = arr.first;
     }
 }
 
@@ -67,10 +70,10 @@ void PmergeMe::sortPairsLst() {
     double tmp;
 
     for (pairsIter it = _pairsLst.begin(); it != _pairsLst.end(); ++it) {
-        if ((*it)[0] > (*it)[1]) {
-            tmp = (*it)[0];
-            (*it)[0] = (*it)[1];
-            (*it)[1] = tmp;
+        if ((*it).first > (*it).second) {
+            tmp = (*it).first;
+            (*it).first = (*it).second;
+            (*it).second = tmp;
 
         }
     }
@@ -80,16 +83,16 @@ void PmergeMe::sortPairsLst() {
 void PmergeMe::insertionSortPairsLst() {
     double rightMostValue;
     pairsIter nextIter;
-    std::array<double, 2> toBeInserted;
+    std::pair<double, double> toBeInserted;
 
     for (pairsIter leftIter = _pairsLst.begin(); leftIter != std::prev(_pairsLst.end()); ++leftIter) {
         nextIter =  std::next(leftIter);
-        rightMostValue = (*leftIter)[1];
+        rightMostValue = (*leftIter).second;
         toBeInserted = *std::next(leftIter);
-        if (rightMostValue > toBeInserted[1]) {
+        if (rightMostValue > toBeInserted.second) {
             for (pairsIter rightIter = nextIter; rightIter != _pairsLst.begin(); --rightIter) {
-                rightMostValue = (*std::prev(rightIter))[1];
-                if (rightMostValue > toBeInserted[1]) {
+                rightMostValue = (*std::prev(rightIter)).second;
+                if (rightMostValue > toBeInserted.second) {
                     std::iter_swap(std::prev(rightIter), rightIter);
                 }
             }
@@ -130,11 +133,10 @@ void PmergeMe::insertPendNumLst(size_t tagNum, size_t insertionCounter)
     }
 }
 
-
 void PmergeMe::finalSortLst() {
     for (pairsIter it = _pairsLst.begin(); it != _pairsLst.end(); ++it) {
-        _outputLst.push_back((*it)[1]);
-        _pendLst.push_back((*it)[0]);
+        _outputLst.push_back((*it).second);
+        _pendLst.push_back((*it).first);
     }
     if (this->_size % 2 != 0)
         _pendLst.push_back(this->_straddler);
@@ -192,16 +194,19 @@ void PmergeMe::sortLst(char **argv) {
 //Vec
 void PmergeMe::splitIntoPairsVec() {
     size_t counter = 0;
-    std::array<double, 2> arr;
+    std::pair<double, double> arr;
     for (inpIter it = _inputVec.begin(); it != _inputVec.end(); ++it) {
         //std::cout << "-" << *it << "-" << std::endl;
         if (!isNumber(*it)) {
             std::cout << "Error" << std::endl;
             exit(0);
         }
-        arr[counter] = atof((*it).c_str());
+		if (counter == 0)
+			arr.first = atof((*it).c_str());
+		else if (counter == 1)
+    		arr.second = atof((*it).c_str());
         if (it + 1 == _inputVec.end() && counter == 0) {
-            this->_straddler = arr[counter];
+            this->_straddler = arr.first;
         }
         if (++counter == 2) {
             this->_pairsVec.push_back(arr);
@@ -214,10 +219,10 @@ void PmergeMe::sortPairsVec() {
     double tmp;
 
     for (pairsIterVec it = _pairsVec.begin(); it != _pairsVec.end(); ++it) {
-        if ((*it)[0] > (*it)[1]) {
-            tmp = (*it)[0];
-            (*it)[0] = (*it)[1];
-            (*it)[1] = tmp;
+        if ((*it).first > (*it).second) {
+            tmp = (*it).first;
+            (*it).first = (*it).second;
+            (*it).second = tmp;
 
         }
     }
@@ -227,16 +232,16 @@ void PmergeMe::sortPairsVec() {
 void PmergeMe::insertionSortPairsVec() {
     double rightMostValue;
     pairsIterVec nextIter;
-    std::array<double, 2> toBeInserted;
+    std::pair<double, double> toBeInserted;
 
     for (pairsIterVec leftIter = _pairsVec.begin(); leftIter != std::prev(_pairsVec.end()); ++leftIter) {
         nextIter =  std::next(leftIter);
-        rightMostValue = (*leftIter)[1];
+        rightMostValue = (*leftIter).second;
         toBeInserted = *std::next(leftIter);
-        if (rightMostValue > toBeInserted[1]) {
+        if (rightMostValue > toBeInserted.second) {
             for (pairsIterVec rightIter = nextIter; rightIter != _pairsVec.begin(); --rightIter) {
-                rightMostValue = (*std::prev(rightIter))[1];
-                if (rightMostValue > toBeInserted[1]) {
+                rightMostValue = (*std::prev(rightIter)).second;
+                if (rightMostValue > toBeInserted.second) {
                     std::iter_swap(std::prev(rightIter), rightIter);
                 }
             }
@@ -272,15 +277,19 @@ void PmergeMe::insertPendNumVec(size_t tagNum, size_t insertionCounter)
 				low = m + 1;
 			}
 		}
-        outputIter = _outputVec.begin() + m;
-        _outputVec.insert(outputIter, pendValue); 
+		if (m < _outputVec.size()) {
+        	outputIter = _outputVec.begin() + m;
+        	_outputVec.insert(outputIter, pendValue);
+		} else {
+			_outputVec.push_back(pendValue);
+		}
     }
 }
 
 void PmergeMe::finalSortVec() {
     for (pairsIterVec it = _pairsVec.begin(); it != _pairsVec.end(); ++it) {
-        _outputVec.push_back((*it)[1]);
-        _pendVec.push_back((*it)[0]);
+        _outputVec.push_back((*it).second);
+        _pendVec.push_back((*it).first);
     }
     if (this->_size % 2 != 0)
         _pendVec.push_back(this->_straddler);
@@ -288,6 +297,7 @@ void PmergeMe::finalSortVec() {
     size_t prevJacobstahl = 0;
     size_t insertionCounter = 1;
     for (size_t i = 0; i < _pendVec.size() + 2; ++i) {
+		std::cout << "no seg yet" << std::endl;
         prevJacobstahl = jacobsthal;
         jacobsthal = this->getNextJacobsthalNum(i, jacobsthal);
         if (prevJacobstahl == 0)
