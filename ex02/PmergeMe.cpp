@@ -85,6 +85,8 @@ void PmergeMe::insertionSortPairsLst() {
     pairsIter nextIter;
     std::pair<double, double> toBeInserted;
 
+	if (_pairsLst.size() == 0)
+		return;
     for (pairsIter leftIter = _pairsLst.begin(); leftIter != std::prev(_pairsLst.end()); ++leftIter) {
         nextIter =  std::next(leftIter);
         rightMostValue = (*leftIter).second;
@@ -172,8 +174,8 @@ void PmergeMe::printResultLst() {
         std::cout << " " << *it;
     }
     std::cout << std::endl;*/
-    double time = (double)this->_timeNeeded; // / 1000000.0;
-    std::cout << "Time to process range of " << this->_size << " elements with std::list needed " << std::fixed << std::setprecision(7) << time << " us" << std::endl;
+    double time = (double)this->_timeNeeded / 1000; // / 1000000.0;
+    std::cout << "Time to process range of " << this->_size << " elements with std::list needed " << std::fixed << std::setprecision(7) << time << " ms" << std::endl;
 
 }
 
@@ -234,6 +236,8 @@ void PmergeMe::insertionSortPairsVec() {
     pairsIterVec nextIter;
     std::pair<double, double> toBeInserted;
 
+	if (_pairsVec.size() == 0)
+		return;
     for (pairsIterVec leftIter = _pairsVec.begin(); leftIter != std::prev(_pairsVec.end()); ++leftIter) {
         nextIter =  std::next(leftIter);
         rightMostValue = (*leftIter).second;
@@ -297,7 +301,6 @@ void PmergeMe::finalSortVec() {
     size_t prevJacobstahl = 0;
     size_t insertionCounter = 1;
     for (size_t i = 0; i < _pendVec.size() + 2; ++i) {
-		std::cout << "no seg yet" << std::endl;
         prevJacobstahl = jacobsthal;
         jacobsthal = this->getNextJacobsthalNum(i, jacobsthal);
         if (prevJacobstahl == 0)
@@ -327,8 +330,8 @@ void PmergeMe::printResultVec() {
         std::cout << " " << *it;
     }
     std::cout << std::endl; */
-    double time = (double)this->_timeNeeded;// / 1000000.0;
-    std::cout << "Time to process range of " << this->_size << " elements with std::vector needed " << std::fixed << std::setprecision(7) << time << " us" << std::endl;
+    double time = (double)this->_timeNeeded / 1000;// / 1000000.0;
+    std::cout << "Time to process range of " << this->_size << " elements with std::vector needed " << std::fixed << std::setprecision(7) << time << " ms" << std::endl;
 }
 
 void PmergeMe::sortVec(char **argv) {
