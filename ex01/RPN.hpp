@@ -4,6 +4,7 @@
 # include <deque>
 # include <iostream>
 # include <sstream>
+# include <cstdlib>
 
 typedef std::deque<double>::iterator stackIter;
 typedef std::deque<std::string>::iterator inputIter;

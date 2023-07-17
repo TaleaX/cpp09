@@ -9,6 +9,7 @@
 # include <cmath>
 # include <sys/time.h>
 #include <iomanip>
+#include <cstdint>
 
 typedef std::list< std::pair<double, double> >::iterator pairsIter;
 typedef std::vector< std::pair<double, double> >::iterator pairsIterVec;
