@@ -2,15 +2,6 @@
 
 //todo string handle wrong input: a in input, input doesnt exist and is the smallest,date doest exist (moth 13, day 45 etc)
 
-// bool BitcoinExchange::isCorrectDateFormate(int iterCounter, std::string val)
-// {
-//     if (iterCounter == 0 && val.length() != 4)
-//         return false;
-//     if ((iterCounter == 1 || iterCounter == 2) && val.length() != 2)
-//         return false;
-//     return true;
-// }
-
 bool isIntNumber(std::string numStr)
 {
     for (size_t i = 0; i < numStr.size(); ++i) {
@@ -56,27 +47,16 @@ int BitcoinExchange::getDateId(std::string str)
 {
     std::istringstream iss(str);
     std::string val;
-    std::string idStr;// = "00000000";
+    std::string idStr;
     int id;
     int iterCounter = 0;
-    //size_t nextPos = 0;
 
     while (getline(iss, val, '-')) {
-        // if (!isCorrectDateFormate(iterCounter, val))
-        //     return -1;
-        /*if (val[0] == '0')
-            val.replace(0, 1, "");*/
         idStr += val;
-        //idStr.replace(nextPos, val.length(), val);
-        //nextPos = nextPos + val.length();
         ++iterCounter;
     }
 	if (iterCounter != 3)
 		return -1;
-	// if (idStr[4] == '0' && idStr[5] == '0')
-	// 	idStr[5] = '1';
-	// if (idStr[6] == '0' && idStr[7] == '0')
-	// 	idStr[7] = '1';
 	if (!isCorrectDateFormate(idStr)) {
 		return -1;
 	}
